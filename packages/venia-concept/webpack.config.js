@@ -24,7 +24,8 @@ const themePaths = {
 const libs = ['react', 'react-dom', 'react-redux', 'react-router-dom', 'redux'];
 
 module.exports = async function(env) {
-    const { phase } = env;
+    console.log(env);
+    const phase = 'development';
 
     const babelOptions = configureBabel(phase);
 
@@ -107,7 +108,7 @@ module.exports = async function(env) {
                 )
             }),
             new ServiceWorkerPlugin({
-                env,
+                { phase: 'development',
                 enableServiceWorkerDebugging,
                 serviceWorkerFileName,
                 paths: themePaths
@@ -117,7 +118,7 @@ module.exports = async function(env) {
     if (phase === 'development') {
         config.devtool = 'source-map';
 
-        config.devServer = await PWADevServer.configure({
+        config.serve = await PWADevServer.configure({
             serviceWorkerFileName,
             publicPath: process.env.MAGENTO_BACKEND_PUBLIC_PATH,
             backendDomain: process.env.MAGENTO_BACKEND_DOMAIN,
@@ -128,7 +129,7 @@ module.exports = async function(env) {
         // A DevServer generates its own unique output path at startup. It needs
         // to assign the main outputPath to this value as well.
 
-        config.output.publicPath = config.devServer.publicPath;
+        config.output.publicPath = config.serve.publicPath;
 
         config.plugins.push(
             new webpack.NamedChunksPlugin(),

@@ -12,7 +12,7 @@
   "scripts": {
     "build": "webpack --progress --color --env.phase production",
     "prepare": "npm-merge-driver install",
-    "start": "webpack-dev-server --progress --color --env.phase development",
+    "start": "webpack-serve",
     "start:debug": "node --inspect-brk ./node_modules/.bin/webpack-dev-server --progress --color --env.phase development"
   },
   "dependencies": {
@@ -53,6 +53,6 @@
     "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^1.0.1",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.11.0"
+    "webpack-serve": "^1.0.4"
   }
 }

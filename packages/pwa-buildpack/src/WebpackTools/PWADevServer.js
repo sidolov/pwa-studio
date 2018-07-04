@@ -1,3 +1,5 @@
+const webpackServeWaitpage = require('webpack-serve-waitpage');
+const convert = require('koa-connect');
 const debug = require('../util/debug').makeFileLogger(__filename);
 const { join } = require('path');
 const url = require('url');
@@ -137,43 +139,66 @@ const PWADevServer = {
         const https = await SSLCertStore.provide(devHost.hostname);
         debug(`https provided:`, https);
         return {
-            contentBase: false,
-            compress: true,
-            hot: true,
+            content: [config.paths.output],
+            clipboard: false,
+            dev: {
+                publicPath: url.format(
+                    Object.assign({}, devHost, { pathname: config.publicPath })
+                )
+            },
+            // contentBase: false,
+            // compress: true,
+            // hot: true,
             https,
             host: devHost.hostname,
             port: devHost.port,
-            publicPath: url.format(
-                Object.assign({}, devHost, { pathname: config.publicPath })
-            ),
-            before(app) {
-                if (config.changeOrigin) {
-                    // replace origins in links in returned html
-                    app.use(
-                        middlewares.originSubstitution(
-                            new url.URL(config.backendDomain),
-                            devHost
-                        )
-                    );
-                }
-                // serviceworker root route
+            add(app, middleware, options) {
                 app.use(
-                    middlewares.staticRootRoute(
-                        join(config.paths.output, config.serviceWorkerFileName)
-                    )
-                );
-            },
-            after(app) {
-                // set static server to load and serve from different paths
-                app.use(config.publicPath, express.static(config.paths.assets));
-
-                // proxy to backend
-                app.use(
-                    middlewares.devProxy({
-                        target: config.backendDomain
+                    webpackServeWaitpage({
+                        title: `${config.id}: Magento PWA Studio`,
+                        theme: 'material',
+                        disableWhenValid: true
                     })
                 );
+                middleware.webpack();
+                middleware.content();
+                app.use(
+                    convert(
+                        middlewares.devProxy({
+                            target: config.backendDomain
+                        })
+                    )
+                );
             }
+            // before(app) {
+            //     if (config.changeOrigin) {
+            //         // replace origins in links in returned html
+            //         app.use(
+            //             middlewares.originSubstitution(
+            //                 new url.URL(config.backendDomain),
+            //                 devHost
+            //             )
+            //         );
+            //     }
+            //     // serviceworker root route
+            //     app.use(
+            //         middlewares.staticRootRoute(
+            //             join(config.paths.output, config.serviceWorkerFileName)
+            //         )
+            //     );
+            // },
+            // after(app) {
+            //     // set static server to load and serve from different paths
+            //     app.use(config.publicPath, express.static(config.paths.assets));
+
+            //     // proxy to backend
+            //     app.use(
+            //         convert(
+            //         middlewares.devProxy({
+            //             target: config.backendDomain
+            //         }))
+            //     );
+            // }
         };
     }
 };
