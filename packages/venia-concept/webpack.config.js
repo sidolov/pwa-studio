@@ -23,9 +23,9 @@ const themePaths = {
 // mark dependencies for vendor bundle
 const libs = ['react', 'react-dom', 'react-redux', 'react-router-dom', 'redux'];
 
-module.exports = async function(env) {
-    console.log(env);
-    const phase = 'development';
+module.exports = async function() {
+    const mode = process.env.WEBPACK_SERVE ? 'development' : 'production';
+    const phase = mode;
 
     const babelOptions = configureBabel(phase);
 
@@ -35,6 +35,7 @@ module.exports = async function(env) {
     const serviceWorkerFileName = process.env.SERVICE_WORKER_FILE_NAME;
 
     const config = {
+        mode,
         context: __dirname, // Node global for the running script's directory
         entry: {
             client: path.resolve(themePaths.src, 'index.js')
@@ -108,7 +109,7 @@ module.exports = async function(env) {
                 )
             }),
             new ServiceWorkerPlugin({
-                { phase: 'development',
+                env: { phase },
                 enableServiceWorkerDebugging,
                 serviceWorkerFileName,
                 paths: themePaths

@@ -1,9 +1,7 @@
 const webpackServeWaitpage = require('webpack-serve-waitpage');
 const convert = require('koa-connect');
 const debug = require('../util/debug').makeFileLogger(__filename);
-const { join } = require('path');
 const url = require('url');
-const express = require('express');
 const GlobalConfig = require('../util/global-config');
 const SSLCertStore = require('../util/ssl-cert-store');
 const optionsValidator = require('../util/options-validator');
@@ -148,13 +146,16 @@ const PWADevServer = {
             },
             // contentBase: false,
             // compress: true,
-            // hot: true,
+            hot: {
+                https: true
+                // port: devHost.port
+            },
             https,
             host: devHost.hostname,
             port: devHost.port,
             add(app, middleware, options) {
                 app.use(
-                    webpackServeWaitpage({
+                    webpackServeWaitpage(options, {
                         title: `${config.id}: Magento PWA Studio`,
                         theme: 'material',
                         disableWhenValid: true
