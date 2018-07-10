@@ -1,5 +1,4 @@
 import debounce from 'lodash.debounce';
-
 import BrowserPersistence from 'src/util/simplePersistence';
 
 export default async function makeCartReducer() {
