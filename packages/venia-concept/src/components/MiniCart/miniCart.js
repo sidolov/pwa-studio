@@ -86,9 +86,12 @@ class MiniCart extends Component {
     }
 
     render() {
-        if (this.props.loading) return <div>Fetching Data</div>;
+        if (this.props.loading) {
+            return <div>Fetching Data</div>;
+        }
+
         const { checkout, productList, totalsSummary, props } = this;
-        const { classes, cart, cartId, cartCurrencyCode, isOpen } = props;
+        const { classes, isOpen } = props;
         const className = isOpen ? classes.root_open : classes.root;
 
         return (

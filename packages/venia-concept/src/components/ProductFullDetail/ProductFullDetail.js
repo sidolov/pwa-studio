@@ -1,11 +1,10 @@
 import { Component, createElement } from 'react';
 import {
+    arrayOf,
     bool,
     func,
-    shape,
     number,
-    objectOf,
-    arrayOf,
+    shape,
     string
 } from 'prop-types';
 import { Price } from '@magento/peregrine';
