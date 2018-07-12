@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { shape, string } from 'prop-types';
 import { Price } from '@magento/peregrine';
 
-import { store } from 'src/';
+import { store } from 'src';
 import { getCartDetails } from 'src/actions/cart';
 import classify from 'src/classify';
 import Icon from 'src/components/Icon';

@@ -1,9 +1,9 @@
 import { Component, Fragment, createElement } from 'react';
 import { number, shape, string } from 'prop-types';
 import { Price } from '@magento/peregrine';
-import { makeProductMediaPath } from 'src/util/makeMediaPath';
 
 import classify from 'src/classify';
+import { makeProductMediaPath } from 'src/util/makeMediaPath';
 import defaultClasses from './product.css';
 
 const imageWidth = 80;
