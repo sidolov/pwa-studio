@@ -47,23 +47,6 @@ const productDetailQuery = gql`
 
 class Product extends Component {
     static propTypes = {
-        classes: shape({
-            action: string,
-            actions: string,
-            addToCart: string,
-            cartActions: string,
-            description: string,
-            descriptionTitle: string,
-            details: string,
-            detailsTitle: string,
-            imageCarousel: string,
-            productName: string,
-            productPrice: string,
-            quantity: string,
-            quantityTitle: string,
-            root: string,
-            title: string
-        }),
         data: shape({
             productDetail: shape({
                 total_count: number,
@@ -119,7 +102,7 @@ class Product extends Component {
                         return (
                             <ProductFullDetail
                                 product={product}
-                                onClickAddToCart={this.addToCart}
+                                addToCart={this.addToCart}
                             />
                         );
                     }}
@@ -129,11 +112,14 @@ class Product extends Component {
     }
 }
 
+const mapStateToProps = ({ cart: { guestCartId } = {} }) => ({ guestCartId });
+const mapDispatchToProps = {
+    addItemToCart,
+    getCartDetails,
+    toggleCart
+};
+
 export default connect(
-    ({ cart: { guestCartId } = {} }) => ({ guestCartId }),
-    {
-        addItemToCart,
-        getCartDetails,
-        toggleCart
-    }
+    mapStateToProps,
+    mapDispatchToProps
 )(Product);

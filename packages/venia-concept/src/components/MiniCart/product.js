@@ -31,19 +31,31 @@ class Product extends Component {
             qty: number.isRequired,
             quote_id: string,
             sku: string.isRequired
-        }),
+        }).isRequired,
         currencyCode: string.isRequired
     };
 
     get options() {
         const { classes, item } = this.props;
-        if (!item.options) return [];
-        return item.options.map(({ name, value }) => (
-            <Fragment key={name}>
-                <dt className={classes.optionName}>{name}</dt>
-                <dd className={classes.optionValue}>{value}</dd>
-            </Fragment>
-        ));
+
+        return item.options && item.options.length > 0 ? (
+            <dl className={this.props.classes.options}>
+                {item.options.map(({ name, value }) => (
+                    <Fragment key={name}>
+                        <dt className={classes.optionName}>{name}</dt>
+                        <dd className={classes.optionValue}>{value}</dd>
+                    </Fragment>
+                ))}
+            </dl>
+        ) : null;
+    }
+
+    styleImage(image) {
+        return {
+            height: imageHeight,
+            width: imageWidth,
+            backgroundImage: `url(${makeProductMediaPath(image.file)})`
+        };
     }
 
     render() {
@@ -54,18 +66,10 @@ class Product extends Component {
             <li className={classes.root}>
                 <div
                     className={classes.image}
-                    style={{
-                        height: imageHeight,
-                        width: imageWidth,
-                        backgroundImage: `url(${makeProductMediaPath(
-                            item.image.file
-                        )})`
-                    }}
+                    style={this.styleImage(item.image)}
                 />
                 <div className={classes.name}>{item.name}</div>
-                {options.length > 0 ? (
-                    <dl className={classes.options}>{options}</dl>
-                ) : null}
+                {options}
                 <div className={classes.quantity}>
                     <select
                         className={classes.quantitySelect}

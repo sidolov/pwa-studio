@@ -33,10 +33,9 @@ class MiniCart extends Component {
 
     constructor(...args) {
         super(...args);
-        this.loadAsyncDependencies();
     }
 
-    async loadAsyncDependencies() {
+    async componentDidMount() {
         const [
             CheckoutComponent,
             checkoutReducer,
@@ -59,9 +58,36 @@ class MiniCart extends Component {
         return Checkout ? <Checkout /> : null;
     }
 
+    get productList() {
+        const { cartId, cartCurrencyCode, cart } = this.props;
+        return cartId ? (
+            <ProductList
+                currencyCode={cartCurrencyCode}
+                items={cart.details.items}
+            />
+        ) : null;
+    }
+
+    get totalsSummary() {
+        const { cartId, cartCurrencyCode, cart, classes } = this.props;
+        return cartId && cart.totals && 'subtotal' in cart.totals ? (
+            <dl className={classes.totals}>
+                <dt className={classes.subtotalLabel}>
+                    <span>Subtotal{` (${cart.details.items_qty} Items)`}</span>
+                </dt>
+                <dd className={classes.subtotalValue}>
+                    <Price
+                        currencyCode={cartCurrencyCode}
+                        value={cart.totals.subtotal}
+                    />
+                </dd>
+            </dl>
+        ) : null;
+    }
+
     render() {
         if (this.props.loading) return <div>Fetching Data</div>;
-        const { checkout, props } = this;
+        const { checkout, productList, totalsSummary, props } = this;
         const { classes, cart, cartId, cartCurrencyCode, isOpen } = props;
         const className = isOpen ? classes.root_open : classes.root;
 
@@ -75,34 +101,9 @@ class MiniCart extends Component {
                         <Icon name="x" />
                     </Trigger>
                 </div>
-                <div className={classes.body}>
-                    {cartId ? (
-                        <ProductList
-                            currencyCode={cartCurrencyCode}
-                            items={cart.details.items}
-                        />
-                    ) : null}
-                </div>
+                <div className={classes.body}>{productList}</div>
                 <div className={classes.footer}>
-                    <div className={classes.summary}>
-                        {cartId && cart.totals && 'subtotal' in cart.totals ? (
-                            <dl className={classes.totals}>
-                                <dt className={classes.subtotalLabel}>
-                                    <span>
-                                        Subtotal{` (${
-                                            cart.details.items_qty
-                                        } Items)`}
-                                    </span>
-                                </dt>
-                                <dd className={classes.subtotalValue}>
-                                    <Price
-                                        currencyCode={cartCurrencyCode}
-                                        value={cart.totals.subtotal}
-                                    />
-                                </dd>
-                            </dl>
-                        ) : null}
-                    </div>
+                    <div className={classes.summary}>{totalsSummary}</div>
                     {checkout}
                 </div>
             </aside>
