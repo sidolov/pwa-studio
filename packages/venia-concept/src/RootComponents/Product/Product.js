@@ -4,6 +4,7 @@ import { Price } from '@magento/peregrine';
 
 import classify from 'src/classify';
 import getUrlKey from 'src/util/getUrlKey';
+import Button from 'src/components/Button';
 import Page from 'src/components/Page';
 import Carousel from 'src/components/ProductImageCarousel';
 import Quantity from 'src/components/ProductQuantity';
@@ -147,9 +148,9 @@ class Product extends Component {
                                     <Quantity />
                                 </section>
                                 <section className={classes.cartActions}>
-                                    <button className={classes.addToCart}>
+                                    <Button>
                                         <span>Add to Cart</span>
-                                    </button>
+                                    </Button>
                                 </section>
                                 <section className={classes.description}>
                                     <h2 className={classes.descriptionTitle}>
