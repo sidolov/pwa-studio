@@ -137,9 +137,9 @@ class Product extends Component {
                                     />
                                 </section>
                                 <section className={classes.actions}>
-                                    <button className={classes.action}>
+                                    <Button>
                                         <span>Add to Wishlist</span>
-                                    </button>
+                                    </Button>
                                 </section>
                                 <section className={classes.quantity}>
                                     <h2 className={classes.quantityTitle}>
